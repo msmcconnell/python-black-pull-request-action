@@ -27,4 +27,10 @@ else
     line_length="${LINE_LENGTH}"
 fi
 
-black --line-length ${line_length} --check ${python_files}
+if 
+    black --line-length ${line_length} ${python_files}
+then
+    echo "No linting errors found."
+else
+    echo "Linting errors found!"
+fi
