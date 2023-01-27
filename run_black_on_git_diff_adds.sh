@@ -20,6 +20,7 @@ diff_length=`wc -l github_diff.txt`
 echo "approximate diff size: ${diff_length}"
 python_files=`cat github_diff.txt | grep -E -- "\+\+\+ |\-\-\- " | awk '{print $2}' | grep -Po -- "(?<=[ab]/).+\.py$"`
 echo "python files edited in this PR: ${python_files}"
+rm github_diff.txt
 
 if [[ -z "${LINE_LENGTH}" ]]; then
     line_length=130
