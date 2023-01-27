@@ -30,7 +30,7 @@ fi
 if 
     black --line-length ${line_length} ${python_files}
 then
-    echo "No linting errors found."
+    echo "Formatting completed without errors."
 else
-    echo "Linting errors found!"
+    echo "Formatting exited with an error code."
 fi
