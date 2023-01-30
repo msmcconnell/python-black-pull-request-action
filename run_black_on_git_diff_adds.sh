@@ -29,7 +29,7 @@ else
 fi
 
 if 
-    black --line-length ${line_length} ${python_files}
+    black --skip-string-normalization --line-length ${line_length} ${python_files}
 then
     echo "Formatting completed without errors."
 else
