@@ -19,6 +19,7 @@ curl --request GET --url ${github_pr_url} --header "authorization: Bearer ${GITH
 diff_length=`wc -l github_diff.txt`
 echo "approximate diff size: ${diff_length}"
 python_files=`cat github_diff.txt | grep -E -- "\+\+\+" | awk '{print $2}' | grep -Po -- "(?<=[ab]/).+\.py$"`
+rm github_diff.txt
 
 if [ ! "$python_files" ];then
    echo "no python files to check"
