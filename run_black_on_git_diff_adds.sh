@@ -18,20 +18,25 @@ echo "looking for diff at ${github_pr_url}"
 curl --request GET --url ${github_pr_url} --header "authorization: Bearer ${GITHUB_TOKEN}" --header "Accept: application/vnd.github.v3.diff" > github_diff.txt
 diff_length=`wc -l github_diff.txt`
 echo "approximate diff size: ${diff_length}"
-python_files=`cat github_diff.txt | grep -E -- "\+\+\+ |\-\-\- " | awk '{print $2}' | grep -Po -- "(?<=[ab]/).+\.py$"`
-echo "python files edited in this PR: ${python_files}"
-rm github_diff.txt
+python_files=`cat github_diff.txt | grep -E -- "\+\+\+" | awk '{print $2}' | grep -Po -- "(?<=[ab]/).+\.py$"`
 
-if [[ -z "${LINE_LENGTH}" ]]; then
+if [ ! "$python_files" ];then
+   echo "no python files to check"
+else
+    echo "python files edited in this PR: ${python_files}"
+
+    if [[ -z "${LINE_LENGTH}" ]]; then
     line_length=130
-else
-    line_length="${LINE_LENGTH}"
+    else
+        line_length="${LINE_LENGTH}"
+    fi
+
+    if 
+        black --skip-string-normalization --line-length ${line_length} ${python_files}
+    then
+        echo "Formatting completed without errors."
+    else
+        echo "Formatting exited with an error code."
+    fi
 fi
 
-if 
-    black --skip-string-normalization --line-length ${line_length} ${python_files}
-then
-    echo "Formatting completed without errors."
-else
-    echo "Formatting exited with an error code."
-fi
